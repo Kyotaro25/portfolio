@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.themleaf.org">
+<head>
+	<link rel="stylesheet" th:href="@{/css/Ranking.css}">
+<meta charset="UTF-8">
+<title>ランキング一覧</title>
+</head>
+<body>
+	<div class="ribbon15-wrapper">
+		<span class="ribbon15">★</span>
+		<div>
+		<h1 style="text-align:center">ランキング</h1>
+		</div>
+	</div>
+	
+	<div class="a">
+	<table border="1" th:unless="${#lists.isEmpty(list)}"
+			align="center" style="table-layout: fixed;">
+	
+	<tr>
+		<th>順位</th>
+		<th>ユーザー名</th>
+		<th>コメント</th>
+		<th>クリア連続回数</th>
+		<th>日付</th>
+	</tr>
+
+	
+
+	<tr th:each="rank, s : ${list}" th:object="${rank}" align="center">
+	       <!-- ステータス変数sのcountプロパティを使用して順位を表示 -->
+	       <td th:text="${s.count}"></td>
+	       <!-- th:objectを使用してrankのフィールドにアクセス -->
+	       <td th:text="*{user_name}"></td>
+	       <td th:text="*{comment}"></td>
+	       <td th:text="*{count}"></td>
+	       <td th:text="*{day}"></td>
+	   </tr>
+	   
+	</table>
+	<br>
+	<br>
+	<br>
+	    <form method="get" th:action="@{/top}">
+
+		<input type="submit" value="タイトル画面に戻る"id="submitButton3">
+	    </form>
+		<style>
+			.a {text-align:center;}
+		</style>
+	</div>
+	
+	<!-- 音声ファイルのリンク -->
+		<audio id="openSound" src="/sounds/data.mp3" preload="auto"></audio>
+	
+		<script>
+			window.onload = function () {
+				var audio = document.getElementById("openSound");
+				if (audio) {
+					audio.play(); // ページがロードされたときに音を鳴らす
+				}
+			};
+		</script>
+	
+	
+	
+</body>
+</html>

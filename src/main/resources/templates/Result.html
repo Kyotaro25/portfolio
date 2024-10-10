@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<link rel = "stylesheet" th:href="	@{/css/Result.css}" >
+    <meta charset="UTF-8" >
+    <title>リザルト画面</title>
+</head>
+<style>
+    body {
+        text-align: center;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+    .score {
+        border: 2px solid #000;
+        padding: 10px;
+        display: inline-block;
+        margin-top: 20px;
+    }
+	.error {
+	            color: red;
+	        }
+</style>
+<body>
+
+    <div >
+        <h1>ゲーム結果</h1>
+		
+        <p >連続正解数: <span th:if="${resultCount != null}" th:text="${resultCount}" ></span></p>
+        
+        <form th:action="@{/register}" method="post"		onsubmit="return validateForm();">
+			
+					<input type="hidden" name="user_id"th:value="${user_id}"> <!-- 隠しフィールド -->
+			        <input type="hidden" name="resultCount"th:value="${resultCount}"> <!-- 隠しフィールド -->
+			        <input type="hidden" name="day"th:value="${day}"> <!-- 隠しフィールド -->
+			
+			
+            <label for="user_name">ユーザー名:</label>
+			<input type="text" id="user_name" name="user_name" th:value="${user_name}">
+			<p th:if="${errorMessage != null}" class="error" th:text="${errorMessage}"></p> <!-- エラーメッセージ表示用 -->
+            <br>
+			<label for="comment">&emsp;コメント:</label>
+			<input type="text" name="comment"th:value="${comment}">
+			<br>
+			<br>
+            <button type="submit">ランキングに保存</button>
+			
+        </form>
+        
+		<script>
+				function validateForm() {
+				    var userName = document.getElementById("user_name").value;
+				    if (userName.trim() === "") {
+				        alert("名前を書いてね");
+				        return false; // フォームの送信を停止
+				    }
+				    return true; // フォーム送信を続ける
+				}
+				</script>
+
+		<br>
+		<br>
+		<form method="get" th:action="@{/top}">
+			
+			<input type="submit" value="タイトル画面へ" id="submitButton4">
+		</form>
+
+
+    </div>
+	<!-- 音声ファイルのリンク -->
+	    <audio id="failedSound" src="/sounds/failed.mp3" preload="auto"></audio>
+	
+	    <script>
+	        window.onload = function() {
+	            var audio = document.getElementById("failedSound");
+	            if (audio) {
+	                audio.play(); // ページがロードされたときに音を鳴らす
+	            }
+	        };
+	    </script>
+</body>
+</html>

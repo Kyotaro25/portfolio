@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<link rel="stylesheet" th:href="@{/css/Top.css}">
+<meta charset="UTF-8">
+<title> 2択ゲーム </title>
+</head>
+<body>
+	
+	<div class="a">
+		<h1> 2択ゲーム	</h1>
+			<br><br><br><br>
+		<form th:action="@{/game}" method="get">
+			<input type="submit" value="スタート" name="Game" id="submitButton1">
+		</form>
+			<br><br><br><br>		
+		<form th:action="@{/ranking}" method="get">
+			<input type="submit" value="ランキングへ" name="Ranking" id="submitButton2">	
+		</form>
+		<style>
+			.a {text-align:center;}
+		</style>
+		
+	</div>
+</body>
+</html>

@@ -32,6 +32,7 @@ public class Ranking {
 	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 	private LocalDate day;
 	
+	/** a */
 	
 	
 	

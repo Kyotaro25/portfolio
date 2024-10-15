@@ -1,6 +1,7 @@
 package com.example.nitaku.controller;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,11 +55,9 @@ public class NitakuController {
 		} else {
 			//カウントリセット前にredirectAttributes.addFlashAttributeで保持させる
 			//引数に, RedirectAttributes redirectAttributesを渡しておく
-			//教科書P271の「addFlashAttribute("count",count)」を使う
-			//教科書P268 041行のようにHTML側で「th:if="${count}" th:text="${count}"」をいれる
 			redirectAttributes.addFlashAttribute("resultCount", hitCount);
 			//recordCount = hitCount;
-			//ここまでその処理！
+			//ここまでその処理
 			hitCount = 0; // ハズレの場合、カウントをリセット
 			model.addAttribute("hitCount", hitCount);
 			return "redirect:/result"; // リザルト画面へ遷移
@@ -96,30 +95,59 @@ public class NitakuController {
 	public String registerResult(@Validated RegistrationForm form, @ModelAttribute("hitCount") Integer hitCount,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 		form.setHitCount(hitCount); // 成功回数をフォームに設定
-		Ranking ranking = new Ranking();
-		ranking.setUser_name(form.getUser_name());
-		ranking.setComment(form.getComment());
+		
+		// DBに名前が登録されているか確認する
+		String name = form.getUser_name();
+		Optional<Ranking> rank = service.selectOneByName(name);
+		
+
 		//ranking.setCount(form.getHitCount());
 		
 		//resultCountの方を使う
 		// resultCountの値をcountにセット
-	    ranking.setCount(form.getResultCount());
-		
-	    
-	    LocalDate d = LocalDate.now();
-		ranking.setDay(d);
+
 
 		//入力チェック
-		if (!bindingResult.hasErrors()) {
-			service.insertRanking(ranking); // データベースに保存
-			return "redirect:/ranking";
-		} else {
-			//エラーの時は再度登録画面を表示
+		
+		if(rank.isEmpty()) {		
+		  if (!bindingResult.hasErrors()) {
+			  Ranking ranking = new Ranking();
+				ranking.setUser_name(name);
+				ranking.setComment(form.getComment());				
+			    ranking.setCount(form.getResultCount());			    
+			    LocalDate d = LocalDate.now();
+				ranking.setDay(d);
+				
+			  service.insertRanking(ranking); // データベースに保存
+			  return "redirect:/ranking";
+		  } else {
+			  //エラーの時は再度登録画面を表示
 			
-			return "redirect:/result";
+		  	  return "redirect:/result";
+		  }
+		} else {
+			// DBにユーザーがある場合の処理
+			Ranking userGet = rank.get(); // ユーザーを取ってくる
+			
+			// 回数を比較し、記録更新していたらデータベースを更新
+			if(form.getResultCount() > userGet.getCount()) {
+				userGet.setCount(form.getResultCount());
+				userGet.setComment(form.getComment());
+			    LocalDate d = LocalDate.now();
+				userGet.setDay(d);
+				
+				service.updateRanking(userGet);
+				
+				return "redirect:/ranking";
+			} else {
+				return "redirect:/ranking";
+			}
+			
+			
+			}
 		}
 
-	}
+	
 	
 	
 	
@@ -127,7 +155,7 @@ public class NitakuController {
 	
 
 	@GetMapping("/top")
-	public String showTop(@ModelAttribute("hitCount") Integer hitCount, Model model) {
+	public String showTop() {
 		return "top";
 	}
 

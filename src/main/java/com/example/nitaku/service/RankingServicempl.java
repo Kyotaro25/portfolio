@@ -1,5 +1,7 @@
 package com.example.nitaku.service;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,27 @@ public class RankingServicempl implements NitakuService {
 	public Iterable<Ranking> selectOrder() {
 		// TODO 自動生成されたメソッド・スタブ
 		return repository.getOrdercount();
+	}
+
+	@Override
+	public void updateRanking(Ranking rank) {
+		// TODO 自動生成されたメソッド・スタブ
+		repository.save(rank);
+		
+	}
+
+	@Override
+	public Optional<Ranking> selectOneByName(String name) {
+		// TODO 自動生成されたメソッド・スタブ
+		Optional<Ranking>rank = repository.findUserByName(name);
+		return rank;
+	}
+
+	@Override
+	public Optional<Ranking> selectOneByCount(int count) {
+		// TODO 自動生成されたメソッド・スタブ
+		Optional<Ranking>rank =repository.findUserByCount(count);
+		return rank;
 	}
 
 

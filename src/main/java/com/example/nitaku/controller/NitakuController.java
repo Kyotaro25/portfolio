@@ -119,6 +119,7 @@ public class NitakuController {
 				ranking.setDay(d);
 				
 			  service.insertRanking(ranking); // データベースに保存
+			  redirectAttributes.addFlashAttribute("msg","登録完了!");
 			  return "redirect:/ranking";
 		  } else {
 			  //エラーの時は再度登録画面を表示
@@ -137,9 +138,11 @@ public class NitakuController {
 				userGet.setDay(d);
 				
 				service.updateRanking(userGet);
+				redirectAttributes.addFlashAttribute("msg","記録更新！");
 				
 				return "redirect:/ranking";
 			} else {
+				redirectAttributes.addFlashAttribute("msg","記録更新ならず・・・");
 				return "redirect:/ranking";
 			}
 			
@@ -165,7 +168,6 @@ public class NitakuController {
 	}
 	@GetMapping("/ranking")
 	public String showRanking(Model model) {
-		
 		Iterable<Ranking> list = service.selectOrder();
 		model.addAttribute("list",list);
 		

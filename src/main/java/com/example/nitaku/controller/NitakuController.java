@@ -94,7 +94,7 @@ public class NitakuController {
 	@PostMapping("/register")
 	public String registerResult(@Validated RegistrationForm form, @ModelAttribute("hitCount") Integer hitCount,
 			BindingResult bindingResult, RedirectAttributes redirectAttributes) {
-		form.setHitCount(hitCount); // 成功回数をフォームに設定
+	//	form.setHitCount(hitCount); // 成功回数をフォームに設定
 		
 		// DBに名前が登録されているか確認する
 		String name = form.getUser_name();
@@ -108,7 +108,6 @@ public class NitakuController {
 
 
 		//入力チェック
-		
 		if(rank.isEmpty()) {		
 		  if (!bindingResult.hasErrors()) {
 			  Ranking ranking = new Ranking();

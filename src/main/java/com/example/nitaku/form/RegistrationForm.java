@@ -28,7 +28,7 @@ public class RegistrationForm {
 	//②コメント
 	private String comment;
 	//③回数
-	private int hitCount;
+	//private int count;
 	
 	//データベースに登録する為の保持回数
 	@Transient
